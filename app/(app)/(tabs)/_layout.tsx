@@ -1,8 +1,9 @@
+import { CustomTabs } from '@/components/CustomTabs'
 import { Tabs } from 'expo-router'
 
 export default function AppLayout() {
   return (
-    <Tabs>
+    <Tabs tabBar={CustomTabs}>
       <Tabs.Screen
         name="index"
         options={{
