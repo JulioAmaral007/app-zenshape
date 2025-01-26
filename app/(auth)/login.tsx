@@ -23,7 +23,7 @@ export default function LoginScreen() {
       Alert.alert('Preencha todos os campos')
       return
     }
-    
+
     setIsLoading(true)
     const res = await loginUser(emailRef.current, passwordRef.current)
     setIsLoading(false)

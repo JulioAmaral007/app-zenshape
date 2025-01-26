@@ -6,7 +6,6 @@ export default function HomeScreen() {
   return (
     <ScreenWrapper>
       <Typo>Home</Typo>
-
     </ScreenWrapper>
   )
 }

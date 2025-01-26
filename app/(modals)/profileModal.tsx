@@ -67,11 +67,7 @@ export default function ProfileModal() {
   return (
     <ModalWrapper>
       <View style={styles.container}>
-        <Header
-          title="Atualizar Perfil"
-          leftIcon={<BackButton />}
-          style={{ marginBottom: 10 }}
-        />
+        <Header title="Atualizar Perfil" leftIcon={<BackButton />} style={{ marginBottom: 10 }} />
 
         <ScrollView contentContainerStyle={styles.form}>
           <View style={styles.avatarContainer}>
