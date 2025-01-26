@@ -2,10 +2,10 @@ import { ScreenWrapper } from '@/components/ScreenWrapper'
 import { Typo } from '@/components/Typo'
 import { StyleSheet } from 'react-native'
 
-export default function StatisticsScreen() {
+export default function DietScreen() {
   return (
     <ScreenWrapper>
-      <Typo>StatisticsScreen</Typo>
+      <Typo>DietScreen</Typo>
     </ScreenWrapper>
   )
 }

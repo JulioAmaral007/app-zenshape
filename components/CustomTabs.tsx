@@ -6,21 +6,14 @@ import { Platform, StyleSheet, TouchableOpacity, View } from 'react-native'
 export function CustomTabs({ state, descriptors, navigation }: BottomTabBarProps) {
   const tabbarIcons: { [key: string]: (isFocused: boolean) => JSX.Element } = {
     index: (isFocused: boolean) => (
-      <Icons.House
+      <Icons.Barbell
         size={28}
         color={isFocused ? colors.primary : colors.white}
         weight={isFocused ? 'fill' : 'regular'}
       />
     ),
-    statistics: (isFocused: boolean) => (
-      <Icons.ChartBar
-        size={28}
-        color={isFocused ? colors.primary : colors.white}
-        weight={isFocused ? 'fill' : 'regular'}
-      />
-    ),
-    wallet: (isFocused: boolean) => (
-      <Icons.Wallet
+    diet: (isFocused: boolean) => (
+      <Icons.CookingPot
         size={28}
         color={isFocused ? colors.primary : colors.white}
         weight={isFocused ? 'fill' : 'regular'}

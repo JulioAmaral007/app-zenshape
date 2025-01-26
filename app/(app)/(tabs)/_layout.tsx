@@ -11,13 +11,7 @@ export default function AppLayout() {
         }}
       />
       <Tabs.Screen
-        name="wallet"
-        options={{
-          headerShown: false,
-        }}
-      />
-      <Tabs.Screen
-        name="statistics"
+        name="diet"
         options={{
           headerShown: false,
         }}
