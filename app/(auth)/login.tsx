@@ -4,15 +4,18 @@ import { Input } from '@/components/Input'
 import { ScreenWrapper } from '@/components/ScreenWrapper'
 import { Typo } from '@/components/Typo'
 import { colors } from '@/constants/theme'
+import { useAuth } from '@/contexts/authContext'
 import { useRouter } from 'expo-router'
 import * as Icons from 'phosphor-react-native'
 import { useRef, useState } from 'react'
 import { Alert, Pressable, StyleSheet, View } from 'react-native'
 
-export default function Login() {
+export default function LoginScreen() {
   const router = useRouter()
   const emailRef = useRef('')
   const passwordRef = useRef('')
+  const authContext = useAuth()
+  const { login: loginUser } = authContext
   const [isLoading, setIsLoading] = useState(false)
 
   const handleSubmit = async () => {
@@ -20,7 +23,13 @@ export default function Login() {
       Alert.alert('Preencha todos os campos')
       return
     }
+    
     setIsLoading(true)
+    const res = await loginUser(emailRef.current, passwordRef.current)
+    setIsLoading(false)
+    if (!res.success) {
+      Alert.alert('Erro', res.msg)
+    }
   }
 
   return (
