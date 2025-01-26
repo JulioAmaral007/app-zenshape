@@ -17,8 +17,8 @@ export default function WelcomeScreen() {
         style={[styles.imgBack, { paddingTop: insets.top }]}
       >
         <View>
-          <TouchableOpacity onPress={() => {}} style={styles.loginButon}>
-            <Typo fontWeight={'500'}>Entrar</Typo>
+          <TouchableOpacity onPress={() => router.push('/(auth)/login')} style={styles.loginButon}>
+            <Typo fontWeight={'500'}>Log In</Typo>
           </TouchableOpacity>
         </View>
 
@@ -51,7 +51,7 @@ export default function WelcomeScreen() {
             entering={FadeInDown.duration(1000).delay(200).springify().damping(12)}
             style={styles.buttonContainer}
           >
-            <Button onPress={() => {}}>
+            <Button onPress={() => router.push('/(auth)/register')}>
               <Typo size={22} color={colors.neutral900} fontWeight={'600'}>
                 Get Started
               </Typo>
