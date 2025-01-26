@@ -8,7 +8,14 @@ export default function Rootlayout() {
     <>
       <StatusBar style="light" />
       <AuthProvider>
-        <Stack screenOptions={{ headerShown: false }} />
+        <Stack screenOptions={{ headerShown: false }}>
+          <Stack.Screen
+            name="(modals)/profileModal"
+            options={{
+              presentation: 'modal',
+            }}
+          />
+        </Stack>
       </AuthProvider>
     </>
   )

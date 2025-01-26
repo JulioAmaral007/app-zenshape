@@ -21,5 +21,6 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     borderCurve: 'continuous',
     padding: 5,
+    marginTop: 20
   },
 })

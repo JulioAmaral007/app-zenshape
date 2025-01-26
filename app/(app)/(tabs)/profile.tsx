@@ -1,16 +1,20 @@
 import { Header } from '@/components/Header'
 import { ScreenWrapper } from '@/components/ScreenWrapper'
 import { Typo } from '@/components/Typo'
+import { auth } from '@/config/firebase'
 import { colors } from '@/constants/theme'
 import { useAuth } from '@/contexts/authContext'
 import { getProfileImage } from '@/services/imageService'
 import { accountOptionType } from '@/types'
 import { Image } from 'expo-image'
+import { useRouter } from 'expo-router'
+import { signOut } from 'firebase/auth'
 import * as Icons from 'phosphor-react-native'
-import { StyleSheet, TouchableOpacity, View } from 'react-native'
+import { Alert, StyleSheet, TouchableOpacity, View } from 'react-native'
 import Animated, { FadeInDown } from 'react-native-reanimated'
 
 export default function ProfileScreen() {
+  const router = useRouter()
   const { user } = useAuth()
   const accountOptions: accountOptionType[] = [
     {
@@ -38,6 +42,30 @@ export default function ProfileScreen() {
       // routeName: '/(modals)/profileModal',
     },
   ]
+
+  const handleLogout = async () => {
+    await signOut(auth)
+  }
+  const showLogoutAlert = () => {
+    Alert.alert('confirm', 'Tem certeza de que deseja sair?', [
+      {
+        text: 'Cancelar',
+        onPress: () => console.log('Saida Cancelada'),
+        style: 'cancel',
+      },
+      {
+        text: 'Sair',
+        onPress: () => handleLogout(),
+        style: 'destructive',
+      },
+    ])
+  }
+  const handlePress = async (option: accountOptionType) => {
+    if (option.title === 'Sair') {
+      showLogoutAlert()
+    }
+    if (option.routeName) router.push(option.routeName)
+  }
 
   return (
     <ScreenWrapper>
@@ -71,7 +99,12 @@ export default function ProfileScreen() {
                   .damping(14)}
                 style={styles.listItem}
               >
-                <TouchableOpacity style={styles.flexRow}>
+                <TouchableOpacity
+                  style={styles.flexRow}
+                  onPress={() => {
+                    handlePress(option)
+                  }}
+                >
                   <View style={[styles.listIcon, { backgroundColor: option?.bgColor }]}>
                     {option.icon && option.icon}
                   </View>
