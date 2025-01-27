@@ -1,5 +1,6 @@
 import { colors } from '@/constants/theme'
-import { ActivityIndicator, ActivityIndicatorProps, View } from 'react-native'
+import type { ActivityIndicatorProps } from 'react-native'
+import { ActivityIndicator, View } from 'react-native'
 
 export function Loading({ size = 'large', color = colors.primary }: ActivityIndicatorProps) {
   return (

@@ -9,46 +9,43 @@ export function LogoutModal({ visible, onClose, onConfirm }: LogoutModalProps) {
     <Modal visible={visible} transparent animationType="fade" onRequestClose={onClose}>
       <TouchableWithoutFeedback onPress={onClose}>
         <View style={styles.overlay}>
-          <TouchableWithoutFeedback>
-            <View style={styles.modalContainer}>
-              <Typo size={22} fontWeight="bold" color={colors.rose} style={{ textAlign: 'center' }}>
-                Are you sure?
-              </Typo>
-              <Typo
-                size={14}
-                color={colors.neutral100}
-                fontWeight="400"
-                style={{ textAlign: 'center' }}
-              >
-                Do you really want to log out? You will need to sign in again to access your
-                account.
-              </Typo>
+          <View style={styles.modalContainer}>
+            <Typo size={22} fontWeight="bold" color={colors.rose} style={{ textAlign: 'center' }}>
+              Are you sure?
+            </Typo>
+            <Typo
+              size={14}
+              color={colors.neutral100}
+              fontWeight="400"
+              style={{ textAlign: 'center' }}
+            >
+              Do you really want to log out? You will need to sign in again to access your account.
+            </Typo>
 
-              <View style={styles.buttonContainer}>
-                <Button style={{ flex: 1, backgroundColor: colors.neutral300 }} onPress={onClose}>
-                  <Typo
-                    color={colors.neutral900}
-                    size={18}
-                    fontWeight="bold"
-                    style={{ textAlign: 'center' }}
-                  >
-                    Cancel
-                  </Typo>
-                </Button>
+            <View style={styles.buttonContainer}>
+              <Button style={{ flex: 1, backgroundColor: colors.neutral300 }} onPress={onClose}>
+                <Typo
+                  color={colors.neutral900}
+                  size={18}
+                  fontWeight="bold"
+                  style={{ textAlign: 'center' }}
+                >
+                  Cancel
+                </Typo>
+              </Button>
 
-                <Button style={{ flex: 1, backgroundColor: colors.rose }} onPress={onConfirm}>
-                  <Typo
-                    color={colors.neutral100}
-                    size={18}
-                    fontWeight="bold"
-                    style={{ textAlign: 'center' }}
-                  >
-                    Log Out
-                  </Typo>
-                </Button>
-              </View>
+              <Button style={{ flex: 1, backgroundColor: colors.rose }} onPress={onConfirm}>
+                <Typo
+                  color={colors.neutral100}
+                  size={18}
+                  fontWeight="bold"
+                  style={{ textAlign: 'center' }}
+                >
+                  Log Out
+                </Typo>
+              </Button>
             </View>
-          </TouchableWithoutFeedback>
+          </View>
         </View>
       </TouchableWithoutFeedback>
     </Modal>
