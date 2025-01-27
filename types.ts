@@ -10,15 +10,18 @@ import type {
   ViewStyle,
 } from 'react-native'
 
-export type ScreenWrapperProps = {
-  style?: ViewStyle
-  children: React.ReactNode
+export type AuthContextType = {
+  user: UserType
+  setUser: Function
+  login: (email: string, password: string) => Promise<{ success: boolean; msg?: string }>
+  register: (
+    email: string,
+    password: string,
+    name: string
+  ) => Promise<{ success: boolean; msg?: string }>
+  updateUserData: (userId: string) => Promise<void>
 }
-export type ModalWrapperProps = {
-  style?: ViewStyle
-  children: React.ReactNode
-  bg?: string
-}
+
 export type accountOptionType = {
   title: string
   icon: React.ReactNode
@@ -26,13 +29,34 @@ export type accountOptionType = {
   routeName?: any
 }
 
-export type TypoProps = {
-  size?: number
-  color?: string
-  fontWeight?: TextStyle['fontWeight']
-  children: any | null
-  style?: TextStyle
-  textProps?: TextProps
+export type BackButtonProps = {
+  style?: ViewStyle
+  iconSize?: number
+}
+
+export type CategoryType = {
+  label: string
+  value: string
+  icon: Icon
+  bgColor: string
+}
+
+export interface CustomButtonProps extends TouchableOpacityProps {
+  style?: ViewStyle
+  onPress?: () => void
+  loading?: boolean
+  children: React.ReactNode
+}
+
+export type ExpenseCategoriesType = {
+  [key: string]: CategoryType
+}
+
+export type HeaderProps = {
+  title?: string
+  style?: ViewStyle
+  leftIcon?: ReactNode
+  rightIcon?: ReactNode
 }
 
 export type IconComponent = React.ComponentType<{
@@ -51,38 +75,54 @@ export type IconProps = {
   fill?: string
 }
 
-export type HeaderProps = {
-  title?: string
+export interface InputProps extends TextInputProps {
+  icon?: React.ReactNode
+  containerStyle?: ViewStyle
+  inputStyle?: TextStyle
+  inputRef?: React.RefObject<TextInput>
+  //   label?: string;
+  //   error?: string;
+}
+
+export type ImageUploadProps = {
+  file?: any
+  onSelect: (file: any) => void
+  onClear: () => void
+  containerStyle?: ViewStyle
+  imageStyle?: ViewStyle
+  placeholder?: string
+}
+
+export type LogoutModalProps = {
+  visible: boolean
+  onClose: () => void
+  onConfirm: () => void
+}
+
+export type ModalWrapperProps = {
   style?: ViewStyle
-  leftIcon?: ReactNode
-  rightIcon?: ReactNode
+  children: React.ReactNode
+  bg?: string
 }
 
-export type BackButtonProps = {
+export type ResponseType = {
+  success: boolean
+  data?: any
+  msg?: string
+}
+
+export type ScreenWrapperProps = {
   style?: ViewStyle
-  iconSize?: number
+  children: React.ReactNode
 }
 
-export type TransactionType = {
-  id?: string
-  type: string
-  amount: number
-  category?: string
-  date: Date | Timestamp | string
-  description?: string
-  image?: any
-  uid?: string
-  walletId: string
-}
-
-export type CategoryType = {
-  label: string
-  value: string
-  icon: Icon
-  bgColor: string
-}
-export type ExpenseCategoriesType = {
-  [key: string]: CategoryType
+export type TypoProps = {
+  size?: number
+  color?: string
+  fontWeight?: TextStyle['fontWeight']
+  children: any | null
+  style?: TextStyle
+  textProps?: TextProps
 }
 
 export type TransactionListType = {
@@ -98,29 +138,16 @@ export type TransactionItemProps = {
   handleClick: Function
 }
 
-export interface InputProps extends TextInputProps {
-  icon?: React.ReactNode
-  containerStyle?: ViewStyle
-  inputStyle?: TextStyle
-  inputRef?: React.RefObject<TextInput>
-  //   label?: string;
-  //   error?: string;
-}
-
-export interface CustomButtonProps extends TouchableOpacityProps {
-  style?: ViewStyle
-  onPress?: () => void
-  loading?: boolean
-  children: React.ReactNode
-}
-
-export type ImageUploadProps = {
-  file?: any
-  onSelect: (file: any) => void
-  onClear: () => void
-  containerStyle?: ViewStyle
-  imageStyle?: ViewStyle
-  placeholder?: string
+export type TransactionType = {
+  id?: string
+  type: string
+  amount: number
+  category?: string
+  date: Date | Timestamp | string
+  description?: string
+  image?: any
+  uid?: string
+  walletId: string
 }
 
 export type UserType = {
@@ -133,24 +160,6 @@ export type UserType = {
 export type UserDataType = {
   name: string
   image?: any
-}
-
-export type AuthContextType = {
-  user: UserType
-  setUser: Function
-  login: (email: string, password: string) => Promise<{ success: boolean; msg?: string }>
-  register: (
-    email: string,
-    password: string,
-    name: string
-  ) => Promise<{ success: boolean; msg?: string }>
-  updateUserData: (userId: string) => Promise<void>
-}
-
-export type ResponseType = {
-  success: boolean
-  data?: any
-  msg?: string
 }
 
 export type WalletType = {
