@@ -22,25 +22,25 @@ export default function ProfileScreen() {
 
   const accountOptions: accountOptionType[] = [
     {
-      title: 'Editar perfil',
+      title: 'Edit profile',
       icon: <Icons.User size={26} color={colors.white} weight="fill" />,
       bgColor: '#6366f1',
       routeName: '/(modals)/profileModal',
     },
     {
-      title: 'Configurações',
+      title: 'Settings',
       icon: <Icons.GearSix size={26} color={colors.white} weight="fill" />,
       bgColor: '#059669',
-      // routeName: '/(modals)/profileModal',
+      // routeName: '/(modals)/settings',
     },
     {
-      title: 'Politica de privacidade',
+      title: 'Privacy policy',
       icon: <Icons.Lock size={26} color={colors.white} weight="fill" />,
       bgColor: colors.neutral600,
       // routeName: '/(modals)/profileModal',
     },
     {
-      title: 'Sair',
+      title: 'Log Out',
       icon: <Icons.Power size={26} color={colors.white} weight="fill" />,
       bgColor: '#e11d48',
       // routeName: '/(modals)/profileModal',
@@ -52,7 +52,7 @@ export default function ProfileScreen() {
   }
 
   const handlePress = async (option: accountOptionType) => {
-    if (option.title === 'Sair') {
+    if (option.title === 'Log Out') {
       setModalVisible(true)
     }
     if (option.routeName) router.push(option.routeName)
