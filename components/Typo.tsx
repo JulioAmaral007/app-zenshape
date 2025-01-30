@@ -1,5 +1,5 @@
 import { colors } from '@/constants/theme'
-import { TypoProps } from '@/types'
+import type { TypoProps } from '@/types'
 import type { TextStyle } from 'react-native'
 import { Text } from 'react-native'
 
