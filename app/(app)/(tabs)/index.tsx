@@ -1,32 +1,87 @@
-import { Button } from '@/components/Button'
-import { Header } from '@/components/Header'
 import { ScreenWrapper } from '@/components/ScreenWrapper'
-import { Typo } from '@/components/Typo'
-import { colors } from '@/constants/theme'
+import { TopBarWorkouts } from '@/components/TopBarWorkouts'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 import { useRouter } from 'expo-router'
-import { ScrollView, StyleSheet, Text, View } from 'react-native'
+import { useEffect, useState } from 'react'
+import { Alert, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 
 export default function HomeScreen() {
   const router = useRouter()
+  const [workouts, setWorkouts] = useState<string[]>([])
+  const [selectedWorkout, setSelectedWorkout] = useState<string>('')
+
+  useEffect(() => {
+    loadWorkouts()
+  }, [])
+
+  const loadWorkouts = async () => {
+    try {
+      const savedWorkouts = await AsyncStorage.getItem('workoutNames')
+      if (savedWorkouts) {
+        const parsedWorkouts = JSON.parse(savedWorkouts)
+        setWorkouts(parsedWorkouts)
+        if (parsedWorkouts.length > 0) {
+          setSelectedWorkout(parsedWorkouts[0])
+        }
+      }
+    } catch (error) {
+      console.error('Error loading workouts:', error)
+    }
+  }
+
+  const addWorkout = async () => {
+    if (workouts.length >= 5) {
+      Alert.alert('Limite atingido', 'Você já tem 5 treinos. Remova um para adicionar outro.')
+      return
+    }
+
+    const newWorkoutName = `Treino ${workouts.length + 1}`
+    const updatedWorkouts = [...workouts, newWorkoutName]
+    setWorkouts(updatedWorkouts)
+    setSelectedWorkout(newWorkoutName)
+
+    try {
+      await AsyncStorage.setItem('workoutNames', JSON.stringify(updatedWorkouts))
+      await AsyncStorage.setItem('selectedWorkout', newWorkoutName)
+    } catch (error) {
+      console.error('Error saving workouts:', error)
+    }
+  }
+
+  const selectWorkout = async (workout: string) => {
+    setSelectedWorkout(workout)
+    try {
+      await AsyncStorage.setItem('selectedWorkout', workout)
+    } catch (error) {
+      console.error('Error saving selected workout:', error)
+    }
+  }
 
   return (
-    <ScreenWrapper>
-      <View style={styles.container}>
-        <Header title="Workout" style={{ marginVertical: 10 }} />
-
-        <ScrollView style={styles.content}>
-          <View style={styles.section}>
-            <Typo size={24} color={colors.neutral100} fontWeight={500}>
-              Quick Start
-            </Typo>
-            <Button
-              onPress={() => router.navigate('/(modals)/workoutModal')}
-              style={styles.darkButton}
-            >
-              <Text style={styles.buttonText}>Start Empty Workout</Text>
-            </Button>
-          </View>
-        </ScrollView>
+    <ScreenWrapper style={styles.container}>
+      <TopBarWorkouts
+        workouts={workouts}
+        selectedWorkout={selectedWorkout}
+        onSelectWorkout={selectWorkout}
+        onAddWorkout={addWorkout}
+      />
+      <View style={styles.content}>
+        <Text style={styles.title}>Workout Tracker</Text>
+        <Text style={styles.subtitle}>Treino selecionado: {selectedWorkout}</Text>
+        <View style={styles.buttonContainer}>
+          <TouchableOpacity
+            style={styles.button}
+            onPress={() => router.navigate('/(modals)/workoutModal')}
+          >
+            <Text style={styles.buttonText}>Adicionar Exercício</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.button}>
+            <Text style={styles.buttonText}>Histórico</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.button}>
+            <Text style={styles.buttonText}>Progresso</Text>
+          </TouchableOpacity>
+        </View>
       </View>
     </ScreenWrapper>
   )
@@ -37,110 +92,34 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingHorizontal: 20,
   },
-  header: {
-    padding: 16,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-  },
-  proBadge: {
-    color: '#FFD700',
-    fontSize: 18,
-    fontWeight: 'bold',
-  },
-  title: {
-    color: '#fff',
-    fontSize: 20,
-    fontWeight: 'bold',
-  },
-  refreshButton: {
-    color: '#fff',
-    fontSize: 24,
-  },
   content: {
     flex: 1,
-  },
-  section: {
-    padding: 16,
-  },
-  sectionHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+    justifyContent: 'center',
     alignItems: 'center',
-    marginBottom: 12,
+    paddingHorizontal: 20,
   },
-  sectionTitle: {
-    color: '#fff',
-    fontSize: 18,
-    fontWeight: 'bold',
-  },
-  addButton: {
-    color: '#fff',
+  title: {
     fontSize: 24,
+    fontWeight: 'bold',
+    marginBottom: 10,
   },
-  darkButton: {
-    backgroundColor: '#1a1a1a',
-    padding: 16,
-    borderRadius: 8,
-    marginBottom: 8,
+  subtitle: {
+    fontSize: 18,
+    marginBottom: 20,
+  },
+  buttonContainer: {
+    width: '100%',
+  },
+  button: {
+    backgroundColor: '#007AFF',
+    padding: 15,
+    borderRadius: 5,
+    marginVertical: 10,
+    alignItems: 'center',
   },
   buttonText: {
-    color: '#fff',
-    fontSize: 16,
-  },
-  routineButtons: {
-    flexDirection: 'row',
-    gap: 8,
-    marginBottom: 16,
-  },
-  halfButton: {
-    flex: 1,
-  },
-  routineItem: {
-    backgroundColor: '#1a1a1a',
-    padding: 16,
-    borderRadius: 8,
-  },
-  routineTitle: {
-    color: '#fff',
+    color: 'white',
     fontSize: 16,
     fontWeight: 'bold',
-  },
-  routineSubtitle: {
-    color: '#666',
-    marginTop: 4,
-  },
-  startButton: {
-    backgroundColor: '#0066ff',
-    padding: 12,
-    borderRadius: 8,
-    alignItems: 'center',
-    marginTop: 12,
-  },
-  startButtonText: {
-    color: '#fff',
-    fontWeight: 'bold',
-  },
-  bottomNav: {
-    flexDirection: 'row',
-    borderTopWidth: 1,
-    borderTopColor: '#333',
-  },
-  navItem: {
-    flex: 1,
-    padding: 12,
-    alignItems: 'center',
-  },
-  navItemActive: {
-    borderTopWidth: 2,
-    borderTopColor: '#0066ff',
-  },
-  navText: {
-    color: '#fff',
-    marginTop: 4,
-    fontSize: 12,
-  },
-  navTextActive: {
-    color: '#0066ff',
   },
 })
