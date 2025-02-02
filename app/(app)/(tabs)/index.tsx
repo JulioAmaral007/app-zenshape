@@ -30,6 +30,11 @@ export default function HomeScreen() {
     // Add workout logic here
   }
 
+  const deleteWorkout = async (workoutToDelete: string) => {
+    const updatedWorkouts = workouts.filter(w => w !== workoutToDelete)
+    setWorkouts(updatedWorkouts)
+  }
+
   return (
     <ScreenWrapper>
       <View style={styles.container}>
@@ -57,6 +62,7 @@ export default function HomeScreen() {
           selectedWorkout={selectedWorkout}
           onSelectWorkout={selectWorkout}
           onAddWorkout={addWorkout}
+          onDeleteWorkout={deleteWorkout}
         />
 
         <View style={styles.content}>

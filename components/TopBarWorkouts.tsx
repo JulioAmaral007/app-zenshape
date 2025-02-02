@@ -1,4 +1,5 @@
-import { FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { Ionicons } from '@expo/vector-icons'
+import { Alert, FlatList, StyleSheet, TouchableOpacity, View } from 'react-native'
 import { Workout } from './Workout'
 
 type TopBarWorkoutsProps = {
@@ -6,6 +7,7 @@ type TopBarWorkoutsProps = {
   selectedWorkout: string
   onSelectWorkout: (workout: string) => void
   onAddWorkout: () => void
+  onDeleteWorkout: (workout: string) => void
 }
 
 export function TopBarWorkouts({
@@ -13,7 +15,15 @@ export function TopBarWorkouts({
   selectedWorkout,
   onSelectWorkout,
   onAddWorkout,
+  onDeleteWorkout,
 }: TopBarWorkoutsProps) {
+  const confirmDeleteWorkout = (workout: string) => {
+    Alert.alert('Excluir treino', `Tem certeza que deseja excluir "${workout}"?`, [
+      { text: 'Cancelar', style: 'cancel' },
+      { text: 'Excluir', style: 'destructive', onPress: () => onDeleteWorkout(workout) },
+    ])
+  }
+
   return (
     <View style={styles.container}>
       <FlatList
@@ -24,6 +34,7 @@ export function TopBarWorkouts({
             name={item}
             isSelected={item === selectedWorkout}
             onPress={() => onSelectWorkout(item)}
+            onLongPress={() => confirmDeleteWorkout(item)} // Segurar para excluir
           />
         )}
         horizontal
@@ -31,9 +42,10 @@ export function TopBarWorkouts({
         contentContainerStyle={styles.content}
         showsHorizontalScrollIndicator={false}
       />
+
       {workouts.length < 5 && (
         <TouchableOpacity style={styles.addButton} onPress={onAddWorkout}>
-          <Text style={styles.addButtonText}>+</Text>
+          <Ionicons name="add-circle" size={40} color="white" />
         </TouchableOpacity>
       )}
     </View>
@@ -55,16 +67,8 @@ const styles = StyleSheet.create({
   },
   addButton: {
     backgroundColor: '#007AFF',
-    borderRadius: 15,
-    width: 30,
-    height: 30,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginRight: 16,
-  },
-  addButtonText: {
-    color: 'white',
-    fontSize: 20,
-    fontWeight: 'bold',
+    borderRadius: 20,
+    padding: 5,
+    marginLeft: 10,
   },
 })
