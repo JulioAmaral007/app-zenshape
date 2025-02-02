@@ -22,7 +22,6 @@ export function TopBarWorkouts({
         renderItem={({ item }) => (
           <Workout
             name={item}
-            icon="fitness-center"
             isSelected={item === selectedWorkout}
             onPress={() => onSelectWorkout(item)}
           />
@@ -48,12 +47,11 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
   },
   list: {
-    height: 52,
-    maxHeight: 52,
+    height: 42,
+    maxHeight: 42,
   },
   content: {
-    gap: 26,
-    paddingHorizontal: 24,
+    gap: 15,
   },
   addButton: {
     backgroundColor: '#007AFF',
