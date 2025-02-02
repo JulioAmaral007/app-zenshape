@@ -1,21 +1,18 @@
-import { Button } from '@/components/Button'
 import { ScreenWrapper } from '@/components/ScreenWrapper'
 import { TopBarWorkouts } from '@/components/TopBarWorkouts'
 import { Typo } from '@/components/Typo'
 import { colors } from '@/constants/theme'
 import { useAuth } from '@/contexts/authContext'
-import type { Exercise, Workout } from '@/exercise'
-import { mockExercises } from '@/mockExercises'
+import type { Exercise } from '@/exercise'
 import { getProfileImage } from '@/services/imageService'
-import AsyncStorage from '@react-native-async-storage/async-storage'
 import { Image } from 'expo-image'
-import { useEffect, useState } from 'react'
-import { Alert, FlatList, StyleSheet, Text, View } from 'react-native'
+import { useState } from 'react'
+import { FlatList, StyleSheet, Text, View } from 'react-native'
 
 export default function HomeScreen() {
   const { user } = useAuth()
   const [workouts, setWorkouts] = useState<string[]>([])
-  const [selectedWorkout, setSelectedWorkout] = useState<string>('')
+  const [selectedWorkout, setSelectedWorkout] = useState<string>('Treino 1')
   const [exercises, setExercises] = useState<Exercise[]>([])
 
   const getGreeting = () => {
@@ -25,74 +22,12 @@ export default function HomeScreen() {
     return 'Boa noite'
   }
 
-  useEffect(() => {
-    loadWorkouts()
-  }, [])
-
-  useEffect(() => {
-    if (selectedWorkout) {
-      loadExercises()
-    }
-  }, [selectedWorkout])
-
-  const loadWorkouts = async () => {
-    try {
-      const savedWorkouts = await AsyncStorage.getItem('workoutNames')
-      if (savedWorkouts) {
-        const parsedWorkouts = JSON.parse(savedWorkouts)
-        setWorkouts(parsedWorkouts)
-        if (parsedWorkouts.length > 0) {
-          setSelectedWorkout(parsedWorkouts[0])
-        }
-      }
-    } catch (error) {
-      console.error('Error loading workouts:', error)
-    }
-  }
-
-  const loadExercises = async () => {
-    try {
-      const savedWorkouts = await AsyncStorage.getItem('workouts')
-      if (savedWorkouts) {
-        const parsedWorkouts: Workout[] = JSON.parse(savedWorkouts)
-        const currentWorkout = parsedWorkouts.find(w => w.name === selectedWorkout)
-        setExercises(currentWorkout ? currentWorkout.exercises : mockExercises)
-      } else {
-        setExercises(mockExercises)
-      }
-    } catch (error) {
-      console.error('Error loading exercises:', error)
-      setExercises(mockExercises)
-    }
-  }
-
-  const addWorkout = async () => {
-    if (workouts.length >= 5) {
-      Alert.alert('Limite atingido', 'Você já tem 5 treinos. Remova um para adicionar outro.')
-      return
-    }
-
-    const newWorkoutName = `Treino ${workouts.length + 1}`
-    const updatedWorkouts = [...workouts, newWorkoutName]
-
-    setWorkouts(updatedWorkouts)
-    setSelectedWorkout(newWorkoutName)
-
-    try {
-      await AsyncStorage.setItem('workoutNames', JSON.stringify(updatedWorkouts))
-      await AsyncStorage.setItem('selectedWorkout', newWorkoutName)
-    } catch (error) {
-      console.error('Error saving workouts:', error)
-    }
-  }
-
-  const selectWorkout = async (workout: string) => {
+  const selectWorkout = (workout: string) => {
     setSelectedWorkout(workout)
-    try {
-      await AsyncStorage.setItem('selectedWorkout', workout)
-    } catch (error) {
-      console.error('Error saving selected workout:', error)
-    }
+  }
+
+  const addWorkout = () => {
+    // Add workout logic here
   }
 
   return (
@@ -116,13 +51,6 @@ export default function HomeScreen() {
             />
           </View>
         </View>
-
-        <Typo color={colors.white} fontWeight="700">
-          Workout Tracker
-        </Typo>
-        <Typo color={colors.white} fontWeight="700">
-          Treino selecionado: {selectedWorkout}
-        </Typo>
 
         <TopBarWorkouts
           workouts={workouts}
@@ -164,13 +92,13 @@ export default function HomeScreen() {
           />
         </View>
 
-        <View style={styles.footer}>
+        {/* <View style={styles.footer}>
           <Button style={styles.button}>
             <Typo color={colors.black} fontWeight="700">
               Add Exercise
             </Typo>
           </Button>
-        </View>
+        </View> */}
       </View>
     </ScreenWrapper>
   )
@@ -204,6 +132,7 @@ const styles = StyleSheet.create({
   },
   content: {
     flex: 1,
+    marginTop: 5,
   },
   exerciseItem: {
     backgroundColor: 'white',

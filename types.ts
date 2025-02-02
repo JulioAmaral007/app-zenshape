@@ -1,5 +1,3 @@
-import type { Timestamp } from 'firebase/firestore'
-import type { Icon } from 'phosphor-react-native'
 import type { ReactNode } from 'react'
 import type {
   TextInput,
@@ -34,13 +32,6 @@ export type BackButtonProps = {
   iconSize?: number
 }
 
-export type CategoryType = {
-  label: string
-  value: string
-  icon: Icon
-  bgColor: string
-}
-
 export interface CustomButtonProps extends TouchableOpacityProps {
   style?: ViewStyle
   onPress?: () => void
@@ -48,8 +39,19 @@ export interface CustomButtonProps extends TouchableOpacityProps {
   children: React.ReactNode
 }
 
-export type ExpenseCategoriesType = {
-  [key: string]: CategoryType
+export type ExerciseExecution = {
+  date: string
+  weight: string
+  reps: string
+}
+
+export type Exercise = {
+  name: string
+  category: string
+  sets: string
+  reps: string
+  weight: string
+  executions: ExerciseExecution[]
 }
 
 export type HeaderProps = {
@@ -125,31 +127,6 @@ export type TypoProps = {
   textProps?: TextProps
 }
 
-export type TransactionListType = {
-  data: TransactionType[]
-  title?: string
-  loading?: boolean
-  emptyListMessage?: string
-}
-
-export type TransactionItemProps = {
-  item: TransactionType
-  index: number
-  handleClick: Function
-}
-
-export type TransactionType = {
-  id?: string
-  type: string
-  amount: number
-  category?: string
-  date: Date | Timestamp | string
-  description?: string
-  image?: any
-  uid?: string
-  walletId: string
-}
-
 export type UserType = {
   uid?: string
   email?: string | null
@@ -162,13 +139,7 @@ export type UserDataType = {
   image?: any
 }
 
-export type WalletType = {
-  id?: string
+export type Workout = {
   name: string
-  amount?: number
-  totalIncome?: number
-  totalExpenses?: number
-  image: any
-  uid?: string
-  created?: Date
+  exercises: Exercise[]
 }
