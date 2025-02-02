@@ -1,13 +1,21 @@
-import AsyncStorage from '@react-native-async-storage/async-storage'
-import { router } from 'expo-router'
+import { BackButton } from '@/components/BackButton'
+import { Button } from '@/components/Button'
+import { Header } from '@/components/Header'
+import { Input } from '@/components/Input'
+import { ModalWrapper } from '@/components/ModalWrapper'
+import { Typo } from '@/components/Typo'
+import { colors } from '@/constants/theme'
 import { useState } from 'react'
-import { ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
+import { ScrollView, StyleSheet, View } from 'react-native'
 
 export default function AddWorkout() {
   const [workoutName, setWorkoutName] = useState('')
   const [exercises, setExercises] = useState([
     { id: Date.now(), name: '', category: '', sets: '', reps: '', weight: '' },
   ])
+  const [loading, setLoading] = useState(false)
+
+  const onSubmit = async () => {}
 
   const addExercise = () => {
     setExercises([
@@ -22,108 +30,115 @@ export default function AddWorkout() {
     setExercises(updatedExercises)
   }
 
-  const saveWorkout = async () => {
-    try {
-      const workout = { name: workoutName, exercises, date: new Date().toISOString() }
-      const existingWorkouts = await AsyncStorage.getItem('workouts')
-      const workouts = existingWorkouts ? JSON.parse(existingWorkouts) : []
-      workouts.push(workout)
-      await AsyncStorage.setItem('workouts', JSON.stringify(workouts))
-      router.replace('/')
-    } catch (error) {
-      console.error('Error saving workout:', error)
-    }
-  }
+  const saveWorkout = async () => {}
 
   return (
-    <ScrollView style={styles.container}>
-      <Text style={styles.title}>Add New Workout</Text>
-      <TextInput
-        style={styles.input}
-        placeholder="Workout Name"
-        value={workoutName}
-        onChangeText={setWorkoutName}
-      />
-      {exercises.map((exercise, index) => (
-        <View key={exercise.id} style={styles.exerciseContainer}>
-          <TextInput
-            style={styles.input}
-            placeholder="Exercise Name"
-            value={exercise.name}
-            onChangeText={value => updateExercise(index, 'name', value)}
-          />
-          <TextInput
-            style={styles.input}
-            placeholder="Category"
-            value={exercise.category}
-            onChangeText={value => updateExercise(index, 'category', value)}
-          />
-          <TextInput
-            style={styles.input}
-            placeholder="Sets"
-            value={exercise.sets}
-            onChangeText={value => updateExercise(index, 'sets', value)}
-            keyboardType="numeric"
-          />
-          <TextInput
-            style={styles.input}
-            placeholder="Reps"
-            value={exercise.reps}
-            onChangeText={value => updateExercise(index, 'reps', value)}
-            keyboardType="numeric"
-          />
-          <TextInput
-            style={styles.input}
-            placeholder="Weight (kg)"
-            value={exercise.weight}
-            onChangeText={value => updateExercise(index, 'weight', value)}
-            keyboardType="numeric"
-          />
-        </View>
-      ))}
-      <TouchableOpacity style={styles.button} onPress={addExercise}>
-        <Text style={styles.buttonText}>Add Exercise</Text>
-      </TouchableOpacity>
-      <TouchableOpacity style={[styles.button, styles.saveButton]} onPress={saveWorkout}>
-        <Text style={styles.buttonText}>Save Workout</Text>
-      </TouchableOpacity>
-    </ScrollView>
+    <ModalWrapper>
+      <View style={styles.container}>
+        <Header title="Add New Workout" leftIcon={<BackButton />} style={{ marginBottom: 10 }} />
+
+        <ScrollView contentContainerStyle={styles.form}>
+          <Input placeholder="Workout Name" value={workoutName} onChangeText={setWorkoutName} />
+
+          {exercises.map((exercise, index) => (
+            <View key={exercise.id} style={styles.inputContainer}>
+              <Typo color={colors.neutral200}>Exercise Name</Typo>
+              <Input
+                placeholder="Exercise Name"
+                value={exercise.name}
+                onChangeText={value => updateExercise(index, 'name', value)}
+              />
+              <Typo color={colors.neutral200}>Category</Typo>
+              <Input
+                placeholder="Category"
+                value={exercise.category}
+                onChangeText={value => updateExercise(index, 'category', value)}
+              />
+              <Typo color={colors.neutral200}>Sets</Typo>
+              <Input
+                placeholder="Sets"
+                value={exercise.sets}
+                onChangeText={value => updateExercise(index, 'sets', value)}
+                keyboardType="numeric"
+              />
+              <Typo color={colors.neutral200}>Reps</Typo>
+              <Input
+                placeholder="Reps"
+                value={exercise.reps}
+                onChangeText={value => updateExercise(index, 'reps', value)}
+                keyboardType="numeric"
+              />
+              <Typo color={colors.neutral200}>Weight (kg)</Typo>
+              <Input
+                placeholder="Weight (kg)"
+                value={exercise.weight}
+                onChangeText={value => updateExercise(index, 'weight', value)}
+                keyboardType="numeric"
+              />
+            </View>
+          ))}
+        </ScrollView>
+      </View>
+
+      <View style={styles.footer}>
+        <Button onPress={onSubmit} loading={loading} style={{ flex: 1 }}>
+          <Typo color={colors.black} fontWeight="700">
+            Atualizar
+          </Typo>
+        </Button>
+      </View>
+    </ModalWrapper>
   )
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 20,
-    backgroundColor: '#f5f5f5',
+    justifyContent: 'space-between',
+    paddingHorizontal: 20,
   },
-  title: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginBottom: 20,
-  },
-  input: {
-    backgroundColor: 'white',
-    padding: 10,
-    borderRadius: 5,
-    marginBottom: 10,
-  },
-  exerciseContainer: {
-    marginBottom: 20,
-  },
-  button: {
-    backgroundColor: '#007AFF',
-    padding: 15,
-    borderRadius: 5,
+  footer: {
     alignItems: 'center',
-    marginBottom: 10,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    paddingHorizontal: 20,
+    gap: 12,
+    paddingTop: 15,
+    borderTopColor: colors.neutral700,
+    marginBottom: 5,
+    borderTopWidth: 1,
   },
-  saveButton: {
-    backgroundColor: '#4CD964',
+  form: {
+    gap: 30,
+    marginTop: 15,
   },
-  buttonText: {
-    color: 'white',
-    fontSize: 16,
-    fontWeight: 'bold',
+  avatarContainer: {
+    position: 'relative',
+    alignSelf: 'center',
+  },
+  avatar: {
+    alignSelf: 'center',
+    backgroundColor: colors.neutral300,
+    height: 135,
+    width: 135,
+    borderRadius: 200,
+    borderWidth: 1,
+    borderColor: colors.neutral500,
+  },
+  editIcon: {
+    position: 'absolute',
+    bottom: 5,
+    right: 7,
+    borderRadius: 100,
+    backgroundColor: colors.neutral100,
+    shadowColor: colors.black,
+    shadowOffset: { width: 0, height: 0 },
+    shadowOpacity: 0.25,
+    shadowRadius: 10,
+    elevation: 4,
+    padding: 7,
+  },
+  inputContainer: {
+    gap: 10,
   },
 })
