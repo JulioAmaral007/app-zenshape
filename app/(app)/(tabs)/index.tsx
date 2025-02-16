@@ -1,38 +1,65 @@
+import { Button } from '@/components/Button'
+import { ExerciseCard } from '@/components/ExerciseCard'
+import { Loading } from '@/components/Loading'
 import { ScreenWrapper } from '@/components/ScreenWrapper'
 import { TopBarWorkouts } from '@/components/TopBarWorkouts'
 import { Typo } from '@/components/Typo'
 import { colors } from '@/constants/theme'
 import { useAuth } from '@/contexts/authContext'
-import type { Exercise } from '@/exercise'
+import { useFetchWorkout } from '@/hooks/useFetchWorkout'
 import { getProfileImage } from '@/services/imageService'
+import { saveWorkoutsList, useWorkoutsList } from '@/services/workoutService'
 import { Image } from 'expo-image'
-import { useState } from 'react'
-import { FlatList, StyleSheet, Text, View } from 'react-native'
+import { useRouter } from 'expo-router'
+import * as Icons from 'phosphor-react-native'
+import { useEffect, useState } from 'react'
+import { FlatList, StyleSheet, View } from 'react-native'
 
 export default function HomeScreen() {
   const { user } = useAuth()
-  const [workouts, setWorkouts] = useState<string[]>([])
-  const [selectedWorkout, setSelectedWorkout] = useState<string>('Treino 1')
-  const [exercises, setExercises] = useState<Exercise[]>([])
+  const router = useRouter()
+  const { data: workoutsList, loading: loadingWorkouts } = useWorkoutsList(user?.uid)
+  const [selectedWorkout, setSelectedWorkout] = useState<string>('')
+
+  useEffect(() => {
+    if (workoutsList.length > 0 && !selectedWorkout) {
+      setSelectedWorkout(workoutsList[0])
+    }
+  }, [workoutsList, selectedWorkout])
+
+  const { data: workout, loading } = useFetchWorkout(user?.uid, selectedWorkout)
 
   const getGreeting = () => {
     const hour = new Date().getHours()
-    if (hour < 12) return 'Bom dia'
-    if (hour < 18) return 'Boa tarde'
-    return 'Boa noite'
+    if (hour < 12) return 'Good morning'
+    if (hour < 18) return 'Good afternoon'
+    return 'Good evening'
   }
 
-  const selectWorkout = (workout: string) => {
-    setSelectedWorkout(workout)
-  }
+  const addWorkout = async () => {
+    let workoutNumber = workoutsList.length + 1
+    let newWorkoutName = `Training ${workoutNumber}`
 
-  const addWorkout = () => {
-    // Add workout logic here
+    while (workoutsList.includes(newWorkoutName)) {
+      workoutNumber++
+      newWorkoutName = `Training ${workoutNumber}`
+    }
+
+    const updatedWorkouts = [...workoutsList, newWorkoutName]
+    const res = await saveWorkoutsList(user?.uid || '', updatedWorkouts)
+
+    if (res.success) {
+      setSelectedWorkout(newWorkoutName)
+    }
   }
 
   const deleteWorkout = async (workoutToDelete: string) => {
-    const updatedWorkouts = workouts.filter(w => w !== workoutToDelete)
-    setWorkouts(updatedWorkouts)
+    const updatedWorkouts = workoutsList.filter(w => w !== workoutToDelete)
+    const res = await saveWorkoutsList(user?.uid || '', updatedWorkouts)
+
+    if (res.success && selectedWorkout === workoutToDelete) {
+      setSelectedWorkout(updatedWorkouts[0] || '')
+    }
   }
 
   return (
@@ -44,7 +71,7 @@ export default function HomeScreen() {
               {getGreeting()}, {user?.name}!
             </Typo>
             <Typo size={15} fontWeight="600" color={colors.neutral400}>
-              Pronto para mais um treino?
+              Ready for another training?
             </Typo>
           </View>
           <View style={styles.avatarContainer}>
@@ -58,53 +85,43 @@ export default function HomeScreen() {
         </View>
 
         <TopBarWorkouts
-          workouts={workouts}
+          workouts={workoutsList}
           selectedWorkout={selectedWorkout}
-          onSelectWorkout={selectWorkout}
+          onSelectWorkout={setSelectedWorkout}
           onAddWorkout={addWorkout}
           onDeleteWorkout={deleteWorkout}
         />
 
         <View style={styles.content}>
           <FlatList
-            data={exercises}
-            renderItem={({ item }: { item: Exercise }) => (
-              <View style={styles.exerciseItem}>
-                <Text style={styles.exerciseName}>{item.name}</Text>
-                <Text style={styles.exerciseDetails}>
-                  Planejado: {item.sets} séries x {item.reps} reps - {item.weight}kg
-                </Text>
-                {item.executions?.length > 0 && (
-                  <View style={styles.executionsContainer}>
-                    <Text style={styles.executionsTitle}>Últimas execuções:</Text>
-                    {item.executions
-                      .slice(-3)
-                      .reverse()
-                      .map(execution => (
-                        <Text key={execution.date} style={styles.executionItem}>
-                          {new Date(execution.date).toLocaleDateString()}: {execution.reps} reps -{' '}
-                          {execution.weight}kg
-                        </Text>
-                      ))}
-                  </View>
-                )}
-              </View>
+            data={workout?.exercises || []}
+            renderItem={({ item }) => (
+              <ExerciseCard exercise={item} workoutName={selectedWorkout} />
             )}
             keyExtractor={(item, index) => `${item.name}-${index}`}
-            style={styles.container}
             ListEmptyComponent={
-              <Text style={styles.emptyText}>Nenhum exercício adicionado ainda.</Text>
+              loading ? (
+                <Loading />
+              ) : (
+                <Typo style={styles.emptyText} color={colors.neutral400}>
+                  No exercise added yet.
+                </Typo>
+              )
             }
           />
         </View>
 
-        {/* <View style={styles.footer}>
-          <Button style={styles.button}>
-            <Typo color={colors.black} fontWeight="700">
-              Add Exercise
-            </Typo>
-          </Button>
-        </View> */}
+        <Button
+          style={styles.floatingButton}
+          onPress={() =>
+            router.push({
+              pathname: '/workoutModal',
+              params: { workoutName: selectedWorkout },
+            })
+          }
+        >
+          <Icons.Plus color={colors.black} weight="bold" size={24} />
+        </Button>
       </View>
     </ScreenWrapper>
   )
@@ -173,18 +190,12 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: '#666',
   },
-  footer: {
-    alignItems: 'center',
-    flexDirection: 'row',
-    justifyContent: 'center',
-    paddingHorizontal: 20,
-    gap: 12,
-    paddingTop: 15,
-    borderTopColor: colors.neutral700,
-    marginBottom: 5,
-    borderTopWidth: 1,
-  },
-  button: {
-    flex: 1,
+  floatingButton: {
+    height: 50,
+    width: 50,
+    borderRadius: 100,
+    position: 'absolute',
+    bottom: 30,
+    right: 30,
   },
 })

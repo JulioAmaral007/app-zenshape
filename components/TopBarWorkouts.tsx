@@ -1,5 +1,5 @@
 import { Ionicons } from '@expo/vector-icons'
-import { Alert, FlatList, StyleSheet, TouchableOpacity, View } from 'react-native'
+import { Alert, FlatList, StyleSheet, View } from 'react-native'
 import { Workout } from './Workout'
 
 type TopBarWorkoutsProps = {
@@ -17,37 +17,46 @@ export function TopBarWorkouts({
   onAddWorkout,
   onDeleteWorkout,
 }: TopBarWorkoutsProps) {
+  const renderItem = ({ item }: { item: string | 'add' }) => {
+    if (item === 'add') {
+      return (
+        <Workout
+          name=""
+          isSelected={false}
+          onPress={onAddWorkout}
+          icon={<Ionicons name="add" size={24} color="white" />}
+        />
+      )
+    }
+
+    return (
+      <Workout
+        name={item}
+        isSelected={item === selectedWorkout}
+        onPress={() => onSelectWorkout(item)}
+        onLongPress={() => confirmDeleteWorkout(item)}
+      />
+    )
+  }
+
   const confirmDeleteWorkout = (workout: string) => {
-    Alert.alert('Excluir treino', `Tem certeza que deseja excluir "${workout}"?`, [
-      { text: 'Cancelar', style: 'cancel' },
-      { text: 'Excluir', style: 'destructive', onPress: () => onDeleteWorkout(workout) },
+    Alert.alert('Delete workout', `Are you sure you want to delete "${workout}"?`, [
+      { text: 'Cancel', style: 'cancel' },
+      { text: 'Delete', style: 'destructive', onPress: () => onDeleteWorkout(workout) },
     ])
   }
 
   return (
     <View style={styles.container}>
       <FlatList
-        data={workouts}
+        data={workouts.length >= 5 ? workouts : [...workouts, 'add']}
         keyExtractor={item => item}
-        renderItem={({ item }) => (
-          <Workout
-            name={item}
-            isSelected={item === selectedWorkout}
-            onPress={() => onSelectWorkout(item)}
-            onLongPress={() => confirmDeleteWorkout(item)} // Segurar para excluir
-          />
-        )}
+        renderItem={renderItem}
         horizontal
         style={styles.list}
         contentContainerStyle={styles.content}
         showsHorizontalScrollIndicator={false}
       />
-
-      {workouts.length < 5 && (
-        <TouchableOpacity style={styles.addButton} onPress={onAddWorkout}>
-          <Ionicons name="add-circle" size={40} color="white" />
-        </TouchableOpacity>
-      )}
     </View>
   )
 }
@@ -59,16 +68,10 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
   },
   list: {
-    height: 42,
-    maxHeight: 42,
+    height: 45,
+    maxHeight: 45,
   },
   content: {
     gap: 15,
-  },
-  addButton: {
-    backgroundColor: '#007AFF',
-    borderRadius: 20,
-    padding: 5,
-    marginLeft: 10,
   },
 })

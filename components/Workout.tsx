@@ -1,35 +1,43 @@
 import { colors } from '@/constants/theme'
-import * as Icons from 'phosphor-react-native'
-import type { PressableProps } from 'react-native'
-import { Pressable, StyleSheet, Text } from 'react-native'
+import { StyleSheet, TouchableOpacity } from 'react-native'
+import { Typo } from './Typo'
 
-type WorkoutProps = PressableProps & {
+type WorkoutProps = {
   name: string
   isSelected: boolean
+  onPress: () => void
+  onLongPress?: () => void
+  icon?: React.ReactNode
 }
 
-export function Workout({ name, isSelected, ...rest }: WorkoutProps) {
-  const color = isSelected ? colors.primary : colors.white
-
+export function Workout({ name, isSelected, onPress, onLongPress, icon }: WorkoutProps) {
   return (
-    <Pressable style={[styles.container, { borderColor: color }]} {...rest}>
-      <Icons.Barbell size={28} color={color} weight={isSelected ? 'fill' : 'regular'} />
-      <Text style={[styles.name, { color }]}>{name}</Text>
-    </Pressable>
+    <TouchableOpacity
+      style={[styles.container, isSelected && styles.selected]}
+      onPress={onPress}
+      onLongPress={onLongPress}
+    >
+      {icon ? (
+        icon
+      ) : (
+        <Typo color={isSelected ? colors.black : colors.white} fontWeight="600">
+          {name}
+        </Typo>
+      )}
+    </TouchableOpacity>
   )
 }
 
-export const styles = StyleSheet.create({
+const styles = StyleSheet.create({
   container: {
-    flexDirection: 'row',
+    height: 45,
+    paddingHorizontal: 20,
+    borderRadius: 100,
+    backgroundColor: colors.neutral800,
     alignItems: 'center',
-    gap: 5,
-    borderWidth: 1,
-    paddingHorizontal: 12,
-    borderRadius: 999,
+    justifyContent: 'center',
   },
-  name: {
-    fontSize: 16,
-    fontWeight: 'bold',
+  selected: {
+    backgroundColor: colors.primary,
   },
 })
