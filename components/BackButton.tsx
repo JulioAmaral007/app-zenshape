@@ -17,10 +17,8 @@ export function BackButton({ style, iconSize = 26 }: BackButtonProps) {
 const styles = StyleSheet.create({
   button: {
     backgroundColor: colors.neutral600,
-    alignSelf: 'flex-start',
     borderRadius: 12,
     borderCurve: 'continuous',
     padding: 5,
-    marginTop: 20,
   },
 })

@@ -39,6 +39,12 @@ export interface CustomButtonProps extends TouchableOpacityProps {
   children: React.ReactNode
 }
 
+export type DeleteButtonProps = {
+  onPress: () => void
+  style?: ViewStyle
+  iconSize?: number
+}
+
 export type ExerciseExecution = {
   date: string
   weight: string

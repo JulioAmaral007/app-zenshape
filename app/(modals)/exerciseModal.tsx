@@ -1,5 +1,6 @@
 import { BackButton } from '@/components/BackButton'
 import { Button } from '@/components/Button'
+import { DeleteButton } from '@/components/DeleteButton'
 import { Header } from '@/components/Header'
 import { Input } from '@/components/Input'
 import { ModalWrapper } from '@/components/ModalWrapper'
@@ -19,13 +20,14 @@ export default function ExerciseModal() {
   const [reps, setReps] = useState('')
   const [weight, setWeight] = useState('')
   const [loading, setLoading] = useState(false)
+  const [showConfirmation, setShowConfirmation] = useState(false)
 
   const { data: workout } = useFetchWorkout(user?.uid, params.workoutName)
   const exercise = workout?.exercises.find(e => e.name === params.exerciseName)
 
   const onSubmit = async () => {
     if (!reps || !weight) {
-      Alert.alert('Erro', 'Preencha todos os campos')
+      Alert.alert('Error', 'Fill all fields')
       return
     }
 
@@ -47,55 +49,47 @@ export default function ExerciseModal() {
       if (res.success) {
         router.back()
       } else {
-        Alert.alert('Erro', res.msg || 'Erro ao salvar execução')
+        Alert.alert('Error', res.msg || 'Error saving execution')
       }
     } catch (error) {
-      Alert.alert('Erro', 'Erro ao salvar execução')
+      Alert.alert('Error', 'Error saving execution')
     } finally {
       setLoading(false)
     }
   }
 
-  const handleDelete = () => {
-    Alert.alert('Deletar Exercício', 'Tem certeza que deseja deletar este exercício?', [
-      { text: 'Cancelar', style: 'cancel' },
-      {
-        text: 'Deletar',
-        style: 'destructive',
-        onPress: async () => {
-          try {
-            setLoading(true)
-            const res = await deleteExercise(
-              user?.uid || '',
-              params.workoutName,
-              params.exerciseName
-            )
-            if (res.success) {
-              router.back()
-            } else {
-              Alert.alert('Erro', res.msg || 'Erro ao deletar exercício')
-            }
-          } catch (error) {
-            Alert.alert('Erro', 'Erro ao deletar exercício')
-          } finally {
-            setLoading(false)
-          }
-        },
-      },
-    ])
+  const handleDelete = async () => {
+    try {
+      setLoading(true)
+      const res = await deleteExercise(user?.uid || '', params.workoutName, params.exerciseName)
+      if (res.success) {
+        router.back()
+      } else {
+        Alert.alert('Erro', res.msg || 'Erro ao deletar exercício')
+      }
+    } catch (error) {
+      Alert.alert('Erro', 'Erro ao deletar exercício')
+    } finally {
+      setLoading(false)
+      setShowConfirmation(false)
+    }
   }
 
   return (
     <ModalWrapper>
       <View style={styles.container}>
-        <Header title={`Atualizar ${params.exerciseName}`} leftIcon={<BackButton />} />
+        <Header
+          title={`Update ${params.exerciseName}`}
+          leftIcon={<BackButton />}
+          rightIcon={<DeleteButton onPress={() => setShowConfirmation(true)} />}
+        />
 
         <ScrollView style={styles.content}>
           <View style={styles.form}>
             <View style={styles.inputContainer}>
-              <Typo color={colors.neutral200}>Repetições</Typo>
+              <Typo color={colors.neutral200}>Reps</Typo>
               <Input
-                placeholder="Repetições"
+                placeholder="Reps"
                 value={reps}
                 onChangeText={setReps}
                 keyboardType="numeric"
@@ -103,9 +97,9 @@ export default function ExerciseModal() {
             </View>
 
             <View style={styles.inputContainer}>
-              <Typo color={colors.neutral200}>Peso (kg)</Typo>
+              <Typo color={colors.neutral200}>Weight (kg)</Typo>
               <Input
-                placeholder="Peso"
+                placeholder="Weight"
                 value={weight}
                 onChangeText={setWeight}
                 keyboardType="numeric"
@@ -116,7 +110,7 @@ export default function ExerciseModal() {
           {exercise?.executions && exercise.executions.length > 0 && (
             <View style={styles.historyContainer}>
               <Typo color={colors.neutral200} style={styles.historyTitle}>
-                Histórico
+                History
               </Typo>
               {exercise.executions
                 .slice()
@@ -135,7 +129,7 @@ export default function ExerciseModal() {
 
         <Button onPress={onSubmit} loading={loading}>
           <Typo color={colors.black} fontWeight="700">
-            Salvar Execução
+            Save Execution
           </Typo>
         </Button>
       </View>
