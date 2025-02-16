@@ -1,5 +1,6 @@
 import { BackButton } from '@/components/BackButton'
 import { Button } from '@/components/Button'
+import { ConfirmationModal } from '@/components/ConfirmationModal'
 import { DeleteButton } from '@/components/DeleteButton'
 import { Header } from '@/components/Header'
 import { Input } from '@/components/Input'
@@ -132,6 +133,15 @@ export default function ExerciseModal() {
             Save Execution
           </Typo>
         </Button>
+
+        <ConfirmationModal
+          visible={showConfirmation}
+          title="Delete Exercise"
+          message="Are you sure you want to delete this exercise?"
+          onConfirm={handleDelete}
+          onClose={() => setShowConfirmation(false)}
+          loading={loading}
+        />
       </View>
     </ModalWrapper>
   )

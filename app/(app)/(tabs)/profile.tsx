@@ -1,5 +1,5 @@
+import { ConfirmationModal } from '@/components/ConfirmationModal'
 import { Header } from '@/components/Header'
-import { LogoutModal } from '@/components/LogoutModal'
 import { ScreenWrapper } from '@/components/ScreenWrapper'
 import { Typo } from '@/components/Typo'
 import { auth } from '@/config/firebase'
@@ -18,7 +18,8 @@ import Animated, { FadeInDown } from 'react-native-reanimated'
 export default function ProfileScreen() {
   const router = useRouter()
   const { user } = useAuth()
-  const [isModalVisible, setModalVisible] = useState(false)
+  const [showLogoutModal, setShowLogoutModal] = useState(false)
+  const [loading, setLoading] = useState(false)
 
   const accountOptions: accountOptionType[] = [
     {
@@ -53,7 +54,7 @@ export default function ProfileScreen() {
 
   const handlePress = async (option: accountOptionType) => {
     if (option.title === 'Log Out') {
-      setModalVisible(true)
+      setShowLogoutModal(true)
     }
     if (option.routeName) router.push(option.routeName)
   }
@@ -110,10 +111,14 @@ export default function ProfileScreen() {
         </View>
       </View>
 
-      <LogoutModal
-        visible={isModalVisible}
-        onClose={() => setModalVisible(false)}
+      <ConfirmationModal
+        visible={showLogoutModal}
+        title="Logout"
+        message="Are you sure you want to logout?"
         onConfirm={handleLogout}
+        onClose={() => setShowLogoutModal(false)}
+        confirmText="Logout"
+        loading={loading}
       />
     </ScreenWrapper>
   )

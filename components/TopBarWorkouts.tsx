@@ -1,5 +1,7 @@
 import { Ionicons } from '@expo/vector-icons'
-import { Alert, FlatList, StyleSheet, View } from 'react-native'
+import { useState } from 'react'
+import { FlatList, StyleSheet, View } from 'react-native'
+import { ConfirmationModal } from './ConfirmationModal'
 import { Workout } from './Workout'
 
 type TopBarWorkoutsProps = {
@@ -17,6 +19,26 @@ export function TopBarWorkouts({
   onAddWorkout,
   onDeleteWorkout,
 }: TopBarWorkoutsProps) {
+  const [showConfirmation, setShowConfirmation] = useState(false)
+  const [workoutToDelete, setWorkoutToDelete] = useState<string>('')
+  const [loading, setLoading] = useState(false)
+
+  const handleDeleteWorkout = async () => {
+    try {
+      setLoading(true)
+      await onDeleteWorkout(workoutToDelete)
+    } finally {
+      setLoading(false)
+      setShowConfirmation(false)
+      setWorkoutToDelete('')
+    }
+  }
+
+  const confirmDeleteWorkout = (workout: string) => {
+    setWorkoutToDelete(workout)
+    setShowConfirmation(true)
+  }
+
   const renderItem = ({ item }: { item: string | 'add' }) => {
     if (item === 'add') {
       return (
@@ -39,25 +61,32 @@ export function TopBarWorkouts({
     )
   }
 
-  const confirmDeleteWorkout = (workout: string) => {
-    Alert.alert('Delete workout', `Are you sure you want to delete "${workout}"?`, [
-      { text: 'Cancel', style: 'cancel' },
-      { text: 'Delete', style: 'destructive', onPress: () => onDeleteWorkout(workout) },
-    ])
-  }
-
   return (
-    <View style={styles.container}>
-      <FlatList
-        data={workouts.length >= 5 ? workouts : [...workouts, 'add']}
-        keyExtractor={item => item}
-        renderItem={renderItem}
-        horizontal
-        style={styles.list}
-        contentContainerStyle={styles.content}
-        showsHorizontalScrollIndicator={false}
+    <>
+      <View style={styles.container}>
+        <FlatList
+          data={workouts.length >= 5 ? workouts : [...workouts, 'add']}
+          keyExtractor={item => item}
+          renderItem={renderItem}
+          horizontal
+          style={styles.list}
+          contentContainerStyle={styles.content}
+          showsHorizontalScrollIndicator={false}
+        />
+      </View>
+
+      <ConfirmationModal
+        visible={showConfirmation}
+        title="Delete Workout"
+        message={`Are you sure you want to delete "${workoutToDelete}"?`}
+        onConfirm={handleDeleteWorkout}
+        onClose={() => {
+          setShowConfirmation(false)
+          setWorkoutToDelete('')
+        }}
+        loading={loading}
       />
-    </View>
+    </>
   )
 }
 
