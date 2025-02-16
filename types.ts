@@ -39,6 +39,17 @@ export interface CustomButtonProps extends TouchableOpacityProps {
   children: React.ReactNode
 }
 
+export type ConfirmationModalProps = {
+  visible: boolean
+  title: string
+  message: string
+  onConfirm: () => Promise<void>
+  onClose: () => void
+  confirmText?: string
+  cancelText?: string
+  loading?: boolean
+}
+
 export type DeleteButtonProps = {
   onPress: () => void
   style?: ViewStyle
@@ -131,6 +142,14 @@ export type TypoProps = {
   children: any | null
   style?: TextStyle
   textProps?: TextProps
+}
+
+export type TopBarWorkoutsProps = {
+  workouts: string[]
+  selectedWorkout: string
+  onSelectWorkout: (workout: string) => void
+  onAddWorkout: () => void
+  onDeleteWorkout: (workout: string) => void
 }
 
 export type UserType = {

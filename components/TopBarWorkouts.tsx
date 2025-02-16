@@ -1,16 +1,9 @@
+import type { TopBarWorkoutsProps } from '@/types'
 import { Ionicons } from '@expo/vector-icons'
 import { useState } from 'react'
 import { FlatList, StyleSheet, View } from 'react-native'
 import { ConfirmationModal } from './ConfirmationModal'
 import { Workout } from './Workout'
-
-type TopBarWorkoutsProps = {
-  workouts: string[]
-  selectedWorkout: string
-  onSelectWorkout: (workout: string) => void
-  onAddWorkout: () => void
-  onDeleteWorkout: (workout: string) => void
-}
 
 export function TopBarWorkouts({
   workouts,

@@ -1,18 +1,8 @@
 import { colors } from '@/constants/theme'
+import type { ConfirmationModalProps } from '@/types'
 import { Modal, StyleSheet, View } from 'react-native'
 import { Button } from './Button'
 import { Typo } from './Typo'
-
-type ConfirmationModalProps = {
-  visible: boolean
-  title: string
-  message: string
-  onConfirm: () => Promise<void>
-  onClose: () => void
-  confirmText?: string
-  cancelText?: string
-  loading?: boolean
-}
 
 export function ConfirmationModal({
   visible,
