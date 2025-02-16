@@ -5,32 +5,73 @@ import { Input } from '@/components/Input'
 import { ModalWrapper } from '@/components/ModalWrapper'
 import { Typo } from '@/components/Typo'
 import { colors } from '@/constants/theme'
+import { useAuth } from '@/contexts/authContext'
+import { createOrUpdateWorkout } from '@/services/workoutService'
+import type { Exercise, WorkoutType } from '@/types'
+import { useLocalSearchParams, useRouter } from 'expo-router'
 import { useState } from 'react'
-import { ScrollView, StyleSheet, View } from 'react-native'
+import { Alert, ScrollView, StyleSheet, View } from 'react-native'
 
-export default function AddWorkout() {
-  const [workoutName, setWorkoutName] = useState('')
-  const [exercises, setExercises] = useState([
-    { id: Date.now(), name: '', category: '', sets: '', reps: '', weight: '' },
+export default function WorkoutModal() {
+  const { user } = useAuth()
+  const router = useRouter()
+  const params = useLocalSearchParams<{ workoutName: string }>()
+  const [workoutName, setWorkoutName] = useState(params.workoutName || '')
+  const [exercises, setExercises] = useState<Exercise[]>([
+    { name: '', sets: '', reps: '', weight: '', executions: [] },
   ])
   const [loading, setLoading] = useState(false)
 
-  const onSubmit = async () => {}
+  const onSubmit = async () => {
+    try {
+      // Validação básica
+      if (!workoutName.trim()) {
+        Alert.alert('Erro', 'Por favor, insira um nome para o treino')
+        return
+      }
 
-  const addExercise = () => {
-    setExercises([
-      ...exercises,
-      { id: Date.now(), name: '', category: '', sets: '', reps: '', weight: '' },
-    ])
+      const hasEmptyExercise = exercises.some(
+        exercise => !exercise.name || !exercise.sets || !exercise.reps
+      )
+
+      if (hasEmptyExercise) {
+        Alert.alert('Erro', 'Por favor, preencha todos os campos obrigatórios dos exercícios')
+        return
+      }
+
+      const workoutData: WorkoutType = {
+        name: workoutName,
+        exercises: exercises.map(exercise => ({
+          ...exercise,
+          executions: [],
+        })),
+        uid: user?.uid,
+      }
+
+      setLoading(true)
+      const res = await createOrUpdateWorkout(workoutData)
+      setLoading(false)
+
+      if (res.success) {
+        router.back()
+      } else {
+        Alert.alert('Erro', res.msg || 'Ocorreu um erro ao salvar o treino')
+      }
+    } catch (error) {
+      setLoading(false)
+      Alert.alert('Erro', 'Ocorreu um erro ao salvar o treino')
+    }
   }
 
-  const updateExercise = (index: number, field: keyof (typeof exercises)[0], value: string) => {
+  const addExercise = () => {
+    setExercises([...exercises, { name: '', sets: '', reps: '', weight: '', executions: [] }])
+  }
+
+  const updateExercise = (index: number, field: keyof Exercise, value: string) => {
     const updatedExercises = [...exercises]
     updatedExercises[index][field] = value as never
     setExercises(updatedExercises)
   }
-
-  const saveWorkout = async () => {}
 
   return (
     <ModalWrapper>
@@ -38,21 +79,20 @@ export default function AddWorkout() {
         <Header title="Add New Workout" leftIcon={<BackButton />} style={{ marginBottom: 10 }} />
 
         <ScrollView contentContainerStyle={styles.form}>
-          <Input placeholder="Workout Name" value={workoutName} onChangeText={setWorkoutName} />
+          <Input
+            placeholder="Workout Name"
+            editable={false}
+            value={workoutName}
+            onChangeText={setWorkoutName}
+          />
 
           {exercises.map((exercise, index) => (
-            <View key={exercise.id} style={styles.inputContainer}>
+            <View key={index} style={styles.inputContainer}>
               <Typo color={colors.neutral200}>Exercise Name</Typo>
               <Input
                 placeholder="Exercise Name"
                 value={exercise.name}
                 onChangeText={value => updateExercise(index, 'name', value)}
-              />
-              <Typo color={colors.neutral200}>Category</Typo>
-              <Input
-                placeholder="Category"
-                value={exercise.category}
-                onChangeText={value => updateExercise(index, 'category', value)}
               />
               <Typo color={colors.neutral200}>Sets</Typo>
               <Input
@@ -78,14 +118,19 @@ export default function AddWorkout() {
             </View>
           ))}
         </ScrollView>
-      </View>
 
-      <View style={styles.footer}>
-        <Button onPress={onSubmit} loading={loading} style={{ flex: 1 }}>
-          <Typo color={colors.black} fontWeight="700">
-            Atualizar
-          </Typo>
-        </Button>
+        <View style={styles.footer}>
+          <Button onPress={addExercise} style={{ flex: 1 }}>
+            <Typo color={colors.white} fontWeight="700">
+              Adicionar Exercício
+            </Typo>
+          </Button>
+          <Button onPress={onSubmit} loading={loading} style={{ flex: 1 }}>
+            <Typo color={colors.black} fontWeight="700">
+              Salvar Treino
+            </Typo>
+          </Button>
+        </View>
       </View>
     </ModalWrapper>
   )
