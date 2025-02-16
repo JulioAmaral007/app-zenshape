@@ -22,6 +22,13 @@ export default function Rootlayout() {
               presentation: 'modal',
             }}
           />
+
+          <Stack.Screen
+            name="(modals)/exerciseModal"
+            options={{
+              presentation: 'modal',
+            }}
+          />
         </Stack>
       </AuthProvider>
     </>
