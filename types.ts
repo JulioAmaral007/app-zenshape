@@ -46,8 +46,8 @@ export type ExerciseExecution = {
 }
 
 export type Exercise = {
+  id?: string
   name: string
-  category: string
   sets: string
   reps: string
   weight: string
@@ -139,7 +139,11 @@ export type UserDataType = {
   image?: any
 }
 
-export type Workout = {
+export type WorkoutType = {
+  id?: string
   name: string
   exercises: Exercise[]
+  uid?: string
+  createdAt?: Date
+  updatedAt?: Date
 }
