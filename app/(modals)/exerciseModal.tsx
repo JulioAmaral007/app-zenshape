@@ -10,6 +10,7 @@ import { colors } from '@/constants/theme'
 import { useAuth } from '@/contexts/authContext'
 import { useFetchWorkout } from '@/hooks/useFetchWorkout'
 import { addExerciseExecution, deleteExercise } from '@/services/workoutService'
+import { formatDate } from '@/utils/dateFormat'
 import { useLocalSearchParams, useRouter } from 'expo-router'
 import { useState } from 'react'
 import { Alert, ScrollView, StyleSheet, View } from 'react-native'
@@ -119,8 +120,7 @@ export default function ExerciseModal() {
                 .map((execution, index) => (
                   <View key={execution.date} style={styles.historyItem}>
                     <Typo color={colors.neutral200}>
-                      {new Date(execution.date).toLocaleDateString()}: {execution.reps} reps -{' '}
-                      {execution.weight}kg
+                      {formatDate(execution.date)}: {execution.reps} reps - {execution.weight}kg
                     </Typo>
                   </View>
                 ))}
@@ -165,7 +165,7 @@ const styles = StyleSheet.create({
   },
   historyContainer: {
     marginTop: 20,
-    padding: 15,
+    paddingVertical: 15,
     backgroundColor: colors.neutral800,
     borderRadius: 8,
   },

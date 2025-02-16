@@ -26,7 +26,7 @@ export default function WorkoutModal() {
     try {
       // Validação básica
       if (!workoutName.trim()) {
-        Alert.alert('Erro', 'Por favor, insira um nome para o treino')
+        Alert.alert('Error', 'Please enter a name for the workout')
         return
       }
 
@@ -35,7 +35,7 @@ export default function WorkoutModal() {
       )
 
       if (hasEmptyExercise) {
-        Alert.alert('Erro', 'Por favor, preencha todos os campos obrigatórios dos exercícios')
+        Alert.alert('Error', 'Please fill in all required fields for the exercises')
         return
       }
 
@@ -55,11 +55,11 @@ export default function WorkoutModal() {
       if (res.success) {
         router.back()
       } else {
-        Alert.alert('Erro', res.msg || 'Ocorreu um erro ao salvar o treino')
+        Alert.alert('Error', res.msg || 'An error occurred while saving the workout')
       }
     } catch (error) {
       setLoading(false)
-      Alert.alert('Erro', 'Ocorreu um erro ao salvar o treino')
+      Alert.alert('Error', 'An error occurred while saving the workout')
     }
   }
 
@@ -78,7 +78,7 @@ export default function WorkoutModal() {
       <View style={styles.container}>
         <Header title="Add New Workout" leftIcon={<BackButton />} style={{ marginBottom: 10 }} />
 
-        <ScrollView contentContainerStyle={styles.form}>
+        <ScrollView contentContainerStyle={styles.form} showsVerticalScrollIndicator={false}>
           <Input
             placeholder="Workout Name"
             editable={false}
@@ -122,12 +122,12 @@ export default function WorkoutModal() {
         <View style={styles.footer}>
           <Button onPress={addExercise} style={{ flex: 1 }}>
             <Typo color={colors.white} fontWeight="700">
-              Adicionar Exercício
+              Add Exercise
             </Typo>
           </Button>
           <Button onPress={onSubmit} loading={loading} style={{ flex: 1 }}>
             <Typo color={colors.black} fontWeight="700">
-              Salvar Treino
+              Save Workout
             </Typo>
           </Button>
         </View>
@@ -156,6 +156,7 @@ const styles = StyleSheet.create({
   form: {
     gap: 30,
     marginTop: 15,
+    paddingBottom: 45,
   },
   avatarContainer: {
     position: 'relative',

@@ -1,5 +1,6 @@
 import { colors } from '@/constants/theme'
 import type { Exercise } from '@/types'
+import { formatDate } from '@/utils/dateFormat'
 import { useRouter } from 'expo-router'
 import { StyleSheet, TouchableOpacity, View } from 'react-native'
 import { Typo } from './Typo'
@@ -35,7 +36,7 @@ export function ExerciseCard({ exercise, workoutName }: ExerciseCardProps) {
       <View style={styles.planContainer}>
         <View style={styles.planItem}>
           <Typo color={colors.neutral400} size={12}>
-            Séries
+            Sets
           </Typo>
           <Typo color={colors.white} size={16} fontWeight="600">
             {exercise.sets}
@@ -51,7 +52,7 @@ export function ExerciseCard({ exercise, workoutName }: ExerciseCardProps) {
         </View>
         <View style={styles.planItem}>
           <Typo color={colors.neutral400} size={12}>
-            Peso
+            Weight
           </Typo>
           <Typo color={colors.white} size={16} fontWeight="600">
             {exercise.weight}kg
@@ -62,11 +63,11 @@ export function ExerciseCard({ exercise, workoutName }: ExerciseCardProps) {
       {lastExecution && (
         <View style={styles.executionContainer}>
           <Typo color={colors.neutral400} size={12}>
-            Última execução
+            Last execution
           </Typo>
           <View style={styles.executionContent}>
             <Typo color={colors.white} size={14}>
-              {new Date(lastExecution.date).toLocaleDateString()}
+              {formatDate(lastExecution.date)}
             </Typo>
             <Typo color={colors.primary}>
               {lastExecution.reps} reps - {lastExecution.weight}kg
