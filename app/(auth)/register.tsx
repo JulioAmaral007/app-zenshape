@@ -38,43 +38,43 @@ export default function RegisterScreen() {
         <BackButton iconSize={28} />
         <View style={{ gap: 5, marginTop: 20 }}>
           <Typo size={30} fontWeight={'800'}>
-            Get
+            Comece
           </Typo>
           <Typo size={30} fontWeight={'800'}>
-            Started!
+            Agora!
           </Typo>
         </View>
         <View style={styles.form}>
           <Typo size={16} color={colors.textLighter}>
-            Create your account and start your fitness journey today!
+            Crie sua conta e comece sua jornada fitness hoje mesmo!
           </Typo>
           <Input
-            placeholder="Enter your name"
+            placeholder="Digite seu nome"
             onChangeText={(value: string) => (nameRef.current = value)}
             icon={<Icons.User size={26} color={colors.neutral300} weight="fill" />}
           />
           <Input
-            placeholder="Enter your email"
+            placeholder="Digite seu e-mail"
             onChangeText={(value: string) => (emailRef.current = value)}
             icon={<Icons.At size={26} color={colors.neutral300} weight="fill" />}
           />
           <Input
-            placeholder="Enter your password"
+            placeholder="Digite sua senha"
             secureTextEntry
             onChangeText={(value: string) => (passwordRef.current = value)}
             icon={<Icons.Lock size={26} color={colors.neutral300} weight="fill" />}
           />
           <Button loading={isLoading} onPress={handleSubmit}>
             <Typo size={21} color={colors.black} fontWeight="700">
-              Sign Up
+              Cadastre-se
             </Typo>
           </Button>
         </View>
         <View style={styles.footer}>
-          <Typo size={15}>Already have an account?</Typo>
+          <Typo size={15}>Já tem uma conta?</Typo>
           <Pressable onPress={() => router.navigate('/(auth)/login')}>
             <Typo size={15} color={colors.primary} fontWeight="700">
-              Log In
+              Entrar
             </Typo>
           </Pressable>
         </View>

@@ -28,10 +28,10 @@ export default function WelcomeScreen() {
             style={{ alignItems: 'center' }}
           >
             <Typo size={30} fontWeight={'800'}>
-              Welcome to Your
+              Bem-vindo à sua
             </Typo>
             <Typo size={30} fontWeight={'800'}>
-              Fitness Journey
+              Jornada Fitness
             </Typo>
           </Animated.View>
 
@@ -40,10 +40,10 @@ export default function WelcomeScreen() {
             style={{ alignItems: 'center', gap: 2 }}
           >
             <Typo size={17} color={colors.textLight}>
-              Get ready to unlock your potential and achieve
+              Prepare-se para desbloquear seu potencial e alcançar
             </Typo>
             <Typo size={17} color={colors.textLight}>
-              your fitness goals, one step at a time
+              seus objetivos fitness, um passo de cada vez
             </Typo>
           </Animated.View>
 
@@ -53,7 +53,7 @@ export default function WelcomeScreen() {
           >
             <Button onPress={() => router.push('/(auth)/register')}>
               <Typo size={22} color={colors.neutral900} fontWeight={'600'}>
-                Get Started
+                Comece Agora
               </Typo>
             </Button>
           </Animated.View>
@@ -77,6 +77,7 @@ const styles = StyleSheet.create({
   loginButon: {
     alignSelf: 'flex-end',
     marginRight: 20,
+    marginTop: 10,
   },
   footer: {
     backgroundColor: colors.neutral900,

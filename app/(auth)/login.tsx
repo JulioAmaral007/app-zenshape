@@ -38,39 +38,39 @@ export default function LoginScreen() {
         <BackButton iconSize={28} />
         <View style={{ gap: 5, marginTop: 20 }}>
           <Typo size={30} fontWeight={'800'}>
-            Hey,
+            Olá,
           </Typo>
           <Typo size={30} fontWeight={'800'}>
-            Welcome back!
+            Bem-vindo de volta!
           </Typo>
         </View>
         <View style={styles.form}>
           <Typo size={16} color={colors.textLighter}>
-            Log in to track your progress and reach your fitness goals!
+            Faça login para acompanhar seu progresso e alcançar suas metas fitness!
           </Typo>
           <Input
-            placeholder="Enter your email"
+            placeholder="Digite seu e-mail"
             onChangeText={(value: string) => (emailRef.current = value)}
             icon={<Icons.At size={26} color={colors.neutral300} weight="fill" />}
           />
           <Input
-            placeholder="Enter your password"
+            placeholder="Digite sua senha"
             secureTextEntry
             onChangeText={(value: string) => (passwordRef.current = value)}
             icon={<Icons.Lock size={26} color={colors.neutral300} weight="fill" />}
           />
-          <Typo style={styles.forgotPassword}>Forgot your password?</Typo>
+          <Typo style={styles.forgotPassword}>Esqueceu sua senha?</Typo>
           <Button loading={isLoading} onPress={handleSubmit}>
             <Typo size={21} color={colors.black} fontWeight="700">
-              Log In
+              Entrar
             </Typo>
           </Button>
         </View>
         <View style={styles.footer}>
-          <Typo size={15}>Don't have an account yet?</Typo>
+          <Typo size={15}>Ainda não tem uma conta?</Typo>
           <Pressable onPress={() => router.navigate('/(auth)/register')}>
             <Typo size={15} color={colors.primary} fontWeight="700">
-              Sign Up
+              Cadastre-se
             </Typo>
           </Pressable>
         </View>
