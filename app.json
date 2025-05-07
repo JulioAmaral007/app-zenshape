@@ -10,16 +10,13 @@
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
-      "supportsTablet": true,
-      "buildNumber": "1"
+      "supportsTablet": true
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#000000"
-      },
-      "versionCode": 1,
-      "package": "com.julioamaral.ZenShape"
+      }
     },
     "web": {
       "bundler": "metro",
@@ -43,14 +40,6 @@
     ],
     "experiments": {
       "typedRoutes": true
-    },
-    "extra": {
-      "router": {
-        "origin": false
-      },
-      "eas": {
-        "projectId": "b37b0b6f-55a0-4e13-8454-b12103601bd2"
-      }
     }
   }
 }
