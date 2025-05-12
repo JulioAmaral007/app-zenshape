@@ -18,6 +18,18 @@ export default function RegisterScreen() {
   const { register: registerUser } = useAuth()
   const [isLoading, setIsLoading] = useState(false)
 
+  const handleNameChange = (value: string) => {
+    nameRef.current = value
+  }
+
+  const handleEmailChange = (value: string) => {
+    emailRef.current = value
+  }
+
+  const handlePasswordChange = (value: string) => {
+    passwordRef.current = value
+  }
+
   const handleSubmit = async () => {
     if (!nameRef.current || !emailRef.current || !passwordRef.current) {
       Alert.alert('Preencha todos os campos')
@@ -50,18 +62,18 @@ export default function RegisterScreen() {
           </Typo>
           <Input
             placeholder="Digite seu nome"
-            onChangeText={(value: string) => (nameRef.current = value)}
+            onChangeText={handleNameChange}
             icon={<Icons.User size={26} color={colors.neutral300} weight="fill" />}
           />
           <Input
             placeholder="Digite seu e-mail"
-            onChangeText={(value: string) => (emailRef.current = value)}
+            onChangeText={handleEmailChange}
             icon={<Icons.At size={26} color={colors.neutral300} weight="fill" />}
           />
           <Input
             placeholder="Digite sua senha"
             secureTextEntry
-            onChangeText={(value: string) => (passwordRef.current = value)}
+            onChangeText={handlePasswordChange}
             icon={<Icons.Lock size={26} color={colors.neutral300} weight="fill" />}
           />
           <Button loading={isLoading} onPress={handleSubmit}>

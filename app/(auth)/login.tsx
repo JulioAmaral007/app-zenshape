@@ -18,6 +18,14 @@ export default function LoginScreen() {
   const { login: loginUser } = authContext
   const [isLoading, setIsLoading] = useState(false)
 
+  const handleEmailChange = (value: string) => {
+    emailRef.current = value
+  }
+
+  const handlePasswordChange = (value: string) => {
+    passwordRef.current = value
+  }
+
   const handleSubmit = async () => {
     if (!emailRef.current || !passwordRef.current) {
       Alert.alert('Preencha todos os campos')
@@ -50,13 +58,13 @@ export default function LoginScreen() {
           </Typo>
           <Input
             placeholder="Digite seu e-mail"
-            onChangeText={(value: string) => (emailRef.current = value)}
+            onChangeText={handleEmailChange}
             icon={<Icons.At size={26} color={colors.neutral300} weight="fill" />}
           />
           <Input
             placeholder="Digite sua senha"
             secureTextEntry
-            onChangeText={(value: string) => (passwordRef.current = value)}
+            onChangeText={handlePasswordChange}
             icon={<Icons.Lock size={26} color={colors.neutral300} weight="fill" />}
           />
           <Typo style={styles.forgotPassword}>Esqueceu sua senha?</Typo>

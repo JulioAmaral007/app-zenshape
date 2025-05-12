@@ -11,12 +11,6 @@ export default function AppLayout() {
         }}
       />
       <Tabs.Screen
-        name="diet"
-        options={{
-          headerShown: false,
-        }}
-      />
-      <Tabs.Screen
         name="profile"
         options={{
           headerShown: false,

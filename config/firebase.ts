@@ -1,10 +1,5 @@
-import { getAnalytics } from 'firebase/analytics'
-// Import the functions you need from the SDKs you need
-import { initializeApp } from 'firebase/app'
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
-
 import AsyncStorage from '@react-native-async-storage/async-storage'
+import { initializeApp } from 'firebase/app'
 import { getReactNativePersistence, initializeAuth } from 'firebase/auth'
 import { getFirestore } from 'firebase/firestore'
 
@@ -22,12 +17,18 @@ const firebaseConfig = {
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig)
-const analytics = getAnalytics(app)
 
-// auth
-export const auth = initializeAuth(app, {
+// Initialize Auth with AsyncStorage persistence
+const auth = initializeAuth(app, {
   persistence: getReactNativePersistence(AsyncStorage),
 })
 
-// db
-export const firestore = getFirestore(app)
+// Initialize Firestore
+const firestore = getFirestore(app)
+
+// Verifica se as variáveis de ambiente estão configuradas
+if (!process.env.EXPO_PUBLIC_FIREBASE_API_KEY) {
+  console.error('Firebase API Key não está configurada')
+}
+
+export { auth, firestore }
