@@ -18,7 +18,7 @@ export default function WelcomeScreen() {
       >
         <View>
           <TouchableOpacity onPress={() => router.push('/(auth)/login')} style={styles.loginButon}>
-            <Typo fontWeight={'500'}>Log In</Typo>
+            <Typo fontWeight={'500'}>Entrar</Typo>
           </TouchableOpacity>
         </View>
 
