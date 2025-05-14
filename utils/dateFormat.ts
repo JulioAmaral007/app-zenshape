@@ -1,4 +1,11 @@
-export function formatDate(date: string | Date): string {
+export function formatDate(date: string | Date, format?: string): string {
+  if (format === 'dd/MM') {
+    return new Date(date).toLocaleDateString('pt-BR', {
+      day: '2-digit',
+      month: '2-digit',
+    })
+  }
+
   return new Date(date).toLocaleDateString('pt-BR', {
     day: '2-digit',
     month: '2-digit',

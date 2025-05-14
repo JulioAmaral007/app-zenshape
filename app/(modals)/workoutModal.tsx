@@ -26,7 +26,7 @@ export default function WorkoutModal() {
     try {
       // Validação básica
       if (!workoutName.trim()) {
-        Alert.alert('Error', 'Please enter a name for the workout')
+        Alert.alert('Erro', 'Digite um nome para o treino')
         return
       }
 
@@ -35,7 +35,7 @@ export default function WorkoutModal() {
       )
 
       if (hasEmptyExercise) {
-        Alert.alert('Error', 'Please fill in all required fields for the exercises')
+        Alert.alert('Erro', 'Preencha todos os campos obrigatórios dos exercícios')
         return
       }
 
@@ -55,11 +55,11 @@ export default function WorkoutModal() {
       if (res.success) {
         router.back()
       } else {
-        Alert.alert('Error', res.msg || 'An error occurred while saving the workout')
+        Alert.alert('Erro', res.msg || 'Ocorreu um erro ao salvar o treino')
       }
     } catch (error) {
       setLoading(false)
-      Alert.alert('Error', 'An error occurred while saving the workout')
+      Alert.alert('Erro', 'Ocorreu um erro ao salvar o treino')
     }
   }
 
@@ -76,41 +76,45 @@ export default function WorkoutModal() {
   return (
     <ModalWrapper>
       <View style={styles.container}>
-        <Header title="Add New Workout" leftIcon={<BackButton />} style={{ marginBottom: 10 }} />
+        <Header
+          title="Adicionar Novo Treino"
+          leftIcon={<BackButton />}
+          style={{ marginBottom: 10 }}
+        />
 
         <ScrollView contentContainerStyle={styles.form} showsVerticalScrollIndicator={false}>
           <Input
-            placeholder="Workout Name"
+            placeholder="Nome do Treino"
             editable={false}
             value={workoutName}
             onChangeText={setWorkoutName}
           />
 
           {exercises.map((exercise, index) => (
-            <View key={index} style={styles.inputContainer}>
-              <Typo color={colors.neutral200}>Exercise Name</Typo>
+            <View key={`${exercise.name}-${index}`} style={styles.inputContainer}>
+              <Typo color={colors.neutral200}>Nome do Exercício</Typo>
               <Input
-                placeholder="Exercise Name"
+                placeholder="Nome do Exercício"
                 value={exercise.name}
                 onChangeText={value => updateExercise(index, 'name', value)}
               />
-              <Typo color={colors.neutral200}>Sets</Typo>
+              <Typo color={colors.neutral200}>Séries</Typo>
               <Input
-                placeholder="Sets"
+                placeholder="Séries"
                 value={exercise.sets}
                 onChangeText={value => updateExercise(index, 'sets', value)}
                 keyboardType="numeric"
               />
-              <Typo color={colors.neutral200}>Reps</Typo>
+              <Typo color={colors.neutral200}>Repetições</Typo>
               <Input
-                placeholder="Reps"
+                placeholder="Repetições"
                 value={exercise.reps}
                 onChangeText={value => updateExercise(index, 'reps', value)}
                 keyboardType="numeric"
               />
-              <Typo color={colors.neutral200}>Weight (kg)</Typo>
+              <Typo color={colors.neutral200}>Peso (kg)</Typo>
               <Input
-                placeholder="Weight (kg)"
+                placeholder="Peso (kg)"
                 value={exercise.weight}
                 onChangeText={value => updateExercise(index, 'weight', value)}
                 keyboardType="numeric"
@@ -122,12 +126,12 @@ export default function WorkoutModal() {
         <View style={styles.footer}>
           <Button onPress={addExercise} style={{ flex: 1 }}>
             <Typo color={colors.white} fontWeight="700">
-              Add Exercise
+              Adicionar Exercício
             </Typo>
           </Button>
           <Button onPress={onSubmit} loading={loading} style={{ flex: 1 }}>
             <Typo color={colors.black} fontWeight="700">
-              Save Workout
+              Salvar Treino
             </Typo>
           </Button>
         </View>

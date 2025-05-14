@@ -11,7 +11,7 @@ export function LogoutModal({ visible, onClose, onConfirm }: LogoutModalProps) {
         <View style={styles.overlay}>
           <View style={styles.modalContainer}>
             <Typo size={22} fontWeight="bold" color={colors.rose} style={{ textAlign: 'center' }}>
-              Are you sure?
+              Tem certeza?
             </Typo>
             <Typo
               size={14}
@@ -19,7 +19,8 @@ export function LogoutModal({ visible, onClose, onConfirm }: LogoutModalProps) {
               fontWeight="400"
               style={{ textAlign: 'center' }}
             >
-              Do you really want to log out? You will need to sign in again to access your account.
+              Você realmente deseja sair? Você precisará fazer login novamente para acessar sua
+              conta.
             </Typo>
 
             <View style={styles.buttonContainer}>
@@ -30,7 +31,7 @@ export function LogoutModal({ visible, onClose, onConfirm }: LogoutModalProps) {
                   fontWeight="bold"
                   style={{ textAlign: 'center' }}
                 >
-                  Cancel
+                  Cancelar
                 </Typo>
               </Button>
 
@@ -41,7 +42,7 @@ export function LogoutModal({ visible, onClose, onConfirm }: LogoutModalProps) {
                   fontWeight="bold"
                   style={{ textAlign: 'center' }}
                 >
-                  Log Out
+                  Sair
                 </Typo>
               </Button>
             </View>

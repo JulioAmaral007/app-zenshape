@@ -10,8 +10,8 @@ export function ConfirmationModal({
   message,
   onConfirm,
   onClose,
-  confirmText = 'Delete',
-  cancelText = 'Cancel',
+  confirmText = 'Deletar',
+  cancelText = 'Cancelar',
   loading = false,
 }: ConfirmationModalProps) {
   return (

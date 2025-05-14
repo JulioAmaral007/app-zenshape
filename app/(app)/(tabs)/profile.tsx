@@ -113,11 +113,11 @@ export default function ProfileScreen() {
 
       <ConfirmationModal
         visible={showLogoutModal}
-        title="Logout"
-        message="Are you sure you want to logout?"
+        title="Sair"
+        message="Tem certeza que deseja sair?"
         onConfirm={handleLogout}
         onClose={() => setShowLogoutModal(false)}
-        confirmText="Logout"
+        confirmText="Sair"
         loading={loading}
       />
     </ScreenWrapper>
