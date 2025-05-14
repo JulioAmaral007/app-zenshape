@@ -3,9 +3,9 @@ import type { DeleteButtonProps } from '@/types'
 import { Trash } from 'phosphor-react-native'
 import { StyleSheet, TouchableOpacity } from 'react-native'
 
-export function DeleteButton({ style, onPress, iconSize = 26 }: DeleteButtonProps) {
+export function DeleteButton({ style, onPress, iconSize = 24 }: DeleteButtonProps) {
   return (
-    <TouchableOpacity style={[styles.button, style]} onPress={onPress}>
+    <TouchableOpacity style={[styles.button, style]} onPress={onPress} activeOpacity={0.7}>
       <Trash size={iconSize} color={colors.rose} weight="bold" />
     </TouchableOpacity>
   )
@@ -13,9 +13,11 @@ export function DeleteButton({ style, onPress, iconSize = 26 }: DeleteButtonProp
 
 const styles = StyleSheet.create({
   button: {
-    backgroundColor: colors.neutral600,
+    width: 40,
+    height: 40,
+    backgroundColor: colors.neutral800,
     borderRadius: 12,
-    borderCurve: 'continuous',
-    padding: 5,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 })
